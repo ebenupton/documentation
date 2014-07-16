@@ -1,8 +1,10 @@
-# What is MMAL ?
+# Background
+
+## What is MMAL ?
 *	Stands for “Multi-Media Abstraction Layer”
 *	A generic API to drive multimedia components (e.g. camera, codecs, renderers, etc)
 
-Design considerations
+## Design considerations
 *	As simple as possible to use from client code
 *	Allows efficient use of HW acceleration
 *	Sufficiently generic to support different kinds of multimedia components
@@ -10,13 +12,14 @@ Design considerations
 *	Supports concurrency
 *	Portability
 
- (Client side API)
-Design goals
+# MMAL API (Client side API)
+
+## Design goals
 
 The MMAL API has been designed to be:
 *	As simple to use as possible
-–	We really wanted to make client code as simple as possible to write.
-–	Even if that meant moving some of the complexity into the MMAL framework itself.
+  –	We really wanted to make client code as simple as possible to write.
+  –	Even if that meant moving some of the complexity into the MMAL framework itself.
 *	But still be generic enough
 –	To support any kind of multimedia component
 –	Be platform agnostic (to support ARM as well as VideoCore components)
