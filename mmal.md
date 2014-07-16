@@ -1,10 +1,12 @@
 # Background
 
 ## What is MMAL ?
+
 * Stands for “Multi-Media Abstraction Layer”
 * A generic API to drive multimedia components (e.g. camera, codecs, renderers, etc)
 
 ## Design considerations
+
 * As simple as possible to use from client code
 * Allows efficient use of HW acceleration
 * Sufficiently generic to support different kinds of multimedia components
@@ -17,6 +19,7 @@
 ## Design goals
 
 The MMAL API has been designed to be:
+
 * As simple to use as possible
   - We really wanted to make client code as simple as possible to write.
   - Even if that meant moving some of the complexity into the MMAL framework itself.
@@ -27,60 +30,67 @@ The MMAL API has been designed to be:
   - To get the best out of VideoCore
 
 ## Design decisions
+
 * API is mostly synchronous
-- Asynchronous APIs are more complex to use
-- We only use asynchronous calls where it matters for performance reasons
+  - Asynchronous APIs are more complex to use
+  - We only use asynchronous calls where it matters for performance reasons
 * API exposes a lot of information directly to the client via client visible context structures.
-- To make it very easy for the client to access most of the information it needs
-- To avoid the client having to duplicate all this information
-- To make debugging easier
+  - To make it very easy for the client to access most of the information it needs
+  - To avoid the client having to duplicate all this information
+  - To make debugging easier
 * API is portable and extensible
-- The API itself is self-contained (no dependencies on other components)
-- Can be extended without breaking source or binary compatibility
-General concepts
+  - The API itself is self-contained (no dependencies on other components)
+  - Can be extended without breaking source or binary compatibility
+
+## General concepts
+
 MMAL is based on similar concepts to OpenMAX IL:
+
 * Components
-- Individual blocks of functionality (e.g. video decoder)
-- Client will need to instantiate a component in order to do anything at all
-- Components expose a list of input and output ports
-- Components also expose a control port
+  - Individual blocks of functionality (e.g. video decoder)
+  - Client will need to instantiate a component in order to do anything at all
+  - Components expose a list of input and output ports
+  - Components also expose a control port
 * Ports
-- Expose a data stream into or out of the component
-- They also contain a full description of the data stream itself
-- Most of the MMAL API is about doing something with a port
+  - Expose a data stream into or out of the component
+  - They also contain a full description of the data stream itself
+  - Most of the MMAL API is about doing something with a port
 * Buffer headers
-- Data is sent to / received from a port using buffer headers
-- Buffer headers are a way to package data with necessary extra metadata
+  - Data is sent to / received from a port using buffer headers
+  - Buffer headers are a way to package data with necessary extra metadata
 * E.g. data size, buffer size, timestamps, misc flags
-- They are also used to help with buffer management
+  - They are also used to help with buffer management
 * E.g. managing the lifetime of a buffer or buffer sharing
-API
+
+## API
+
 * The MMAL API is doxygen documented. This is probably the best place to start for an exhaustive view of the API.
-
 * interface/mmal/*.h define the public API
-- Everything in subdirectories is not part of the public API
-- Subdirectories contain internal interfaces
-- The util directory is the exception
+  - Everything in subdirectories is not part of the public API
+  - Subdirectories contain internal interfaces
+  - The util directory is the exception
 * interface/mmal/util/*.h
-- Collection of helper libraries
-- These are also public interfaces
-
+  - Collection of helper libraries
+  - These are also public interfaces
 * Most API calls return a status code (see MMAL_STATUS_T in mmal_types.h)
 * Most API calls take either a component or a port as an argument
-- Depending on whether the action is port specific or applies to the whole component
-Components
+  - Depending on whether the action is port specific or applies to the whole component
+
+## Components
+
 * Defined in interface/mmal/mmal_components.h
 * mmal_component_create()
-- Instantiates a component given a string (name which uniquely identifies the component)
-- Returns a pointer to a MMAL_COMPONENT_T structure containing:
-* a list of input ports
-* a list of output ports
-* a control port
+  - Instantiates a component given a string (name which uniquely identifies the component)
+  - Returns a pointer to a MMAL_COMPONENT_T structure containing:
+    * a list of input ports
+    * a list of output ports
+    * a control port
 * mmal_component_destroy()
-- Does just the opposite
+  - Does just the opposite
 * mmal_component_enable()/disable()
-- A component only processes data on its ports when it is enabled
-Ports
+  - A component only processes data on its ports when it is enabled
+
+## Ports
 * Defined in interface/mmal/mmal_ports.h
 * Components expose MMAL_PORT_T structures for all their input, output and control ports.
 * A port structure contains a lot of information defining the data stream going through that port:
